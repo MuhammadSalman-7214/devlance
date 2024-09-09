@@ -4,8 +4,11 @@ import 'aos/dist/aos.css';
 
 const WhyUs = () => {
   useEffect(() => {
-    AOS.init({ duration: 1000 }); // Initialize AOS with a duration of 1000ms
+    AOS.init({
+      duration: 2000,
+    });
   }, []);
+  
 
   return (  
     <div className="w-full px-4 py-10 overflow-x-hidden">
