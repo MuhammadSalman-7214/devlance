@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUpQuestion1 = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
+  const navigate = useNavigate(); // Hook for navigation
 
   // Questions array
   const questions = [
@@ -32,10 +33,12 @@ const SignUpQuestion1 = () => {
     }
   };
 
-  // Handler to move to the previous question
+  // Handler to move to the previous question or route
   const handleBack = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+    } else {
+      navigate(-1); // Navigate to the previous route
     }
   };
 
@@ -46,7 +49,6 @@ const SignUpQuestion1 = () => {
 
   return (
     <div className='flex flex-col min-h-screen'>
-
       {/* Header Section */}
       <div className="bg-white sticky top-0 left-0 right-0 z-10 flex items-center justify-between p-4 shadow-md w-full">
         <h1 className="text-2xl md:text-3xl font-bold text-themeColor">
@@ -117,14 +119,12 @@ const SignUpQuestion1 = () => {
       
       {/* Footer Navigation Buttons */}
       <div className="flex justify-between w-full p-4 md:p-6 bg-white fixed bottom-0 left-0 right-0 shadow-md">
-        <Link to="/tell-us">
         <button
           onClick={handleBack}
           className="py-2 px-3 md:px-4 bg-gray-200 text-gray-700 font-bold rounded-lg disabled:opacity-50"
         >
           Back
         </button>
-        </Link>
         
         <div className="flex">
           <button
@@ -134,16 +134,18 @@ const SignUpQuestion1 = () => {
             Skip
           </button>
           {currentQuestion === questions.length - 1 ? (
+            <Link to="/addProfile">
             <button
               onClick={() => alert('Form Submitted')}
-              className="py-2 px-3 md:px-4 bg-themeColor text-white font-bold rounded-lg hover:bg-themeColor1"
+              className="py-2 px-3 md:px-4 bg-themeColor text-white font-bold rounded-lg hover:bg-themeColor1 hover:text-themeColor"
             >
-              Submit
+              Submit, create a profile
             </button>
+            </Link>
           ) : (
             <button
               onClick={handleNext}
-              className="py-2 px-3 md:px-4 bg-themeColor text-white font-bold rounded-lg hover:bg-themeColor1"
+              className="py-2 px-3 md:px-4 bg-themeColor text-white font-bold rounded-lg hover:bg-themeColor1 hover:text-themeColor"
             >
               Next
             </button>

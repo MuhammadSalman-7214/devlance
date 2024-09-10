@@ -1,6 +1,8 @@
 import './App.css';
 import Navbar from './components/Navbar';
 import CountrySelection from './pages/CountrySelection';
+import MakeProfile from './pages/MakeProfile';
+import PreviewProfile from './pages/PreviewProfile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import SignUpMenu from './pages/SignUpMenu';
@@ -22,6 +24,8 @@ function App() {
 
       <Route  path="/tell-us" element={<SignUpQuuestion />} />
       <Route  path="/tell-about-yourself" element={<SignUpQuestion1 />} />
+      <Route  path="/addProfile" element={<MakeProfile />} />
+      <Route  path="/previewProfile" element={<PreviewProfile />} />
       </Routes>
     </div>
   );

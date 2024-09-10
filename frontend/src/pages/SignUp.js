@@ -140,7 +140,7 @@ const SignUp = () => {
             <button
               type="submit"
               className="w-full py-2 px-4 bg-themeColor text-white font-bold rounded-lg hover:bg-themeColor1 hover:text-themeColor"
-              disabled
+              
             >
               Create Account
             </button>
