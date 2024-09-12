@@ -85,8 +85,10 @@ const SignIn = () => {
               </div>
 
               {/* Separator */}
-              <div className="text-center mb-6">
-                <span className="text-gray-600">or</span>
+              <div className="flex items-center mb-6">
+                <hr className="flex-grow border-gray-300"/>
+                <span className="text-gray-600 mx-4">or</span>
+                <hr className="flex-grow border-gray-300"/>
               </div>
 
               {/* Email and Password Form */}

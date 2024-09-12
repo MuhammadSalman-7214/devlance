@@ -58,7 +58,7 @@ const SignUp = () => {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        navigate('/success');
+        navigate('/addProfile');
       }
     } catch (error) {
       console.error('Error during sign-up:', error);
@@ -74,7 +74,7 @@ const SignUp = () => {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        navigate('/success');
+        navigate('/addProfile');
       }
     } catch (error) {
       console.error('Google Sign-In Error:', error);
@@ -104,9 +104,12 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="text-center mb-6">
-              <span className="text-gray-600">or</span>
+            <div className="flex items-center mb-6">
+              <hr className="flex-grow border-gray-300"/>
+              <span className="text-gray-600 mx-4">or</span>
+              <hr className="flex-grow border-gray-300"/>
             </div>
+
 
             <form onSubmit={handleSubmit}>
               <div className="flex w-full mb-4">

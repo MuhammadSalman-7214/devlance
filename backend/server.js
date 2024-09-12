@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import authRouter from './routes/authRoutes.js';
+import FreelanceProfileRouter from './routes/freelanceProfileRoutes.js';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 app.use('/auth', authRouter);
+app.use('/freelanceProfile', FreelanceProfileRouter);
 
 mongoose.connect(process.env.DB)
   .then(() => {

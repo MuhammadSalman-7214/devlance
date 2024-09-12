@@ -2,6 +2,9 @@ import axios from 'axios';
 import Select from 'react-select';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify'; // Import Toastify components
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8011';
 
 function MakeProfile() {
   const [educationFields, setEducationFields] = useState([{ title: '', institute: '', year: '', marks: '' }]);
@@ -15,6 +18,14 @@ function MakeProfile() {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [hourlyRate, setHourlyRate] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [skillsTitle, setSkillsTitle] = useState('');
+  const [aboutMe, setAboutMe] = useState('');
   
 
   useEffect(() => {
@@ -158,10 +169,55 @@ function MakeProfile() {
     navigate(-1)
   };
 
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Extract user ID from token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('You need to sign in first.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(`${API_BASE_URL}/freelanceProfile/profile`, {
+        dateOfBirth,
+        phoneNumber,
+        country: selectedCountry?.value || '',
+        city,
+        state,
+        zipCode,
+        streetAddress,
+        category: selectedCategory?.value || '',
+        subCategory: selectedSubCategory?.value || '',
+        skills: selectedSkills.map(skill => skill.value),
+        languages: selectedLanguages.map(language => language.value),
+        hourlyRate,
+        skillsTitle,
+        aboutMe,
+        education: educationFields,
+        experience: experienceFields,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        toast.success('Profile successfully created!');
+        navigate('/profileSuccess');
+      }
+    } catch (error) {
+      console.error('Error during profile submission:', error);
+      toast.error('Profile creation failed. Please try again.');
+    }
+  };
+  
  
 
   return (
     <div>
+    <ToastContainer />
         {/* Header Section */}
         <div className="bg-white sticky top-0 left-0 right-0 z-10 flex items-center justify-between p-4 shadow-md w-full">
             <h1 className="text-2xl md:text-3xl font-bold text-themeColor">
@@ -171,7 +227,7 @@ function MakeProfile() {
         </div>
         {/* Main Form */}
         <div className="p-6 w-full mx-auto bg-white">
-            <form>
+            <form onSubmit={handleProfileSubmit}>
             {/* Personal Info */}
             <div className="mb-6">
             <h3 className="text-xl font-semibold text-white bg-themeColor p-3 rounded-t-md">Profile Information</h3>
@@ -187,11 +243,22 @@ function MakeProfile() {
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">Date of Birth</label>
-                  <input type="date" className="w-full p-2 border border-themeColor1 rounded-md text-gray-400" />
+                  <input 
+                    type="date" 
+                    className="w-full p-2 border border-themeColor1 rounded-md text-gray-400" 
+                    value={dateOfBirth} 
+                    onChange={(e) => setDateOfBirth(e.target.value)} 
+                  />
+
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">Phone Number</label>
-                  <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" placeholder="Enter Phone Number" />
+                  <input 
+                  type="text" 
+                  className="w-full p-2 border border-themeColor1 rounded-md" 
+                  placeholder="Enter Phone Number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)} />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">Country</label>
@@ -209,23 +276,24 @@ function MakeProfile() {
                         }),
                     }}
                     className='w-full rounded-md text-left'
+                    
                   />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">City</label>
-                  <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" placeholder="Enter Your City" />
+                  <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" placeholder="Enter Your City" value={city} onChange={(e) => setCity(e.target.value)} />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">Province/State</label>
-                  <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" placeholder="Enter Your Province" />
+                  <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" placeholder="Enter Your Province" value={state} onChange={(e) => setState(e.target.value)} />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">ZIP/Postal Code</label>
-                  <input type="text" className="w-full p-2 border border-themeColor1  rounded-md" placeholder="Enter Zip/postal code" />
+                  <input type="text" className="w-full p-2 border border-themeColor1  rounded-md" placeholder="Enter Zip/postal code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-left">Street Address</label>
-                  <textarea type="text" className="w-full p-2 border border-themeColor1  rounded-md" />
+                  <textarea type="text" className="w-full p-2 border border-themeColor1  rounded-md"  value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)} />
                 </div>
               </div>
             </div>
@@ -357,7 +425,7 @@ function MakeProfile() {
                 <div className="p-6 bg-gray-100 rounded-b-md">
                 <div>
                     <label className="block text-gray-700 font-medium mb-2 text-left">Title</label>
-                    <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" />
+                    <input type="text" className="w-full p-2 border border-themeColor1 rounded-md" value={skillsTitle} onChange={(e) => setSkillsTitle(e.target.value)} />
                     </div>
                 </div>
             </div>
@@ -368,7 +436,7 @@ function MakeProfile() {
                 <div className="p-6 bg-gray-100 rounded-b-md">
                 <div>
                     <label className="block text-gray-700 font-medium mb-2 text-left">About Me</label>
-                    <textarea type="text" className="w-full p-2 border border-themeColor1 rounded-md" />
+                    <textarea type="text" className="w-full p-2 border border-themeColor1 rounded-md" value={aboutMe} onChange={(e) => setAboutMe(e.target.value)} />
                     </div>
                 </div>
             </div>
